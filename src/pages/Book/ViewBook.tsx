@@ -5,7 +5,7 @@ import {
  
   FaUserEdit,
   FaBarcode,
-  FaCalendarAlt,
+
   FaHashtag,
   FaEdit,
   FaTrash,
@@ -97,11 +97,7 @@ const ViewBook = () => {
                   label="Accession Number"
                   value={book.accessionNumber}
                 />
-                <DetailItem
-                  icon={<FaCalendarAlt />}
-                  label="Date Added"
-                  value={new Date(book.date).toLocaleDateString()}
-                />
+              
               </div>
 
               {/* Right Column */}

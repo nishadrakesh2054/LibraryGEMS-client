@@ -117,14 +117,29 @@ const Circulation = () => {
   );
 
   // Handle return
-  const handleReturn = (transactionId: number) => {
-    const today = new Date().toISOString().split("T")[0];
+//   const handleReturn = (transactionId: number) => {
+//     const today = new Date().toISOString().split("T")[0];
+//     const updatedTransactions = transactions.map((transaction) => {
+//       if (transaction.id === transactionId) {
+//         return {
+//           ...transaction,
+//           returnDate: today,
+//           status: "Returned",
+//         };
+//       }
+//       return transaction;
+//     });
+//     setTransactions(updatedTransactions);
+//   };
+
+const handleReturn = (transactionId: number) => {
+    const today = new Date().toISOString().split('T')[0];
     const updatedTransactions = transactions.map((transaction) => {
       if (transaction.id === transactionId) {
         return {
           ...transaction,
           returnDate: today,
-          status: "Returned",
+          status: "Returned" as const, // explicitly set as "Returned" literal type
         };
       }
       return transaction;

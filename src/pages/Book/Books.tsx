@@ -1,4 +1,3 @@
-
 import {
   FaPlusCircle,
   FaEdit,
@@ -24,7 +23,7 @@ const Books = () => {
     return {
       id: apiBook.id,
       title: apiBook.title,
-      author: apiBook.subtitle?.join(", ") || "Unknown", 
+      author: apiBook.subtitle?.join(", ") || "Unknown",
       isbn: apiBook.isbnNo,
       accessionNumber: apiBook.accessionNumber,
       noOfCopies: apiBook.noOfCopies,
@@ -33,8 +32,6 @@ const Books = () => {
       barCodes: apiBook.barCodes,
     };
   };
-
-
 
   const apiBooks = apiResponse?.data?.books || [];
   const books = apiBooks.map(transformBookData);

@@ -1,13 +1,12 @@
 export interface Book {
   id: number;
-  date?: Date | null;
   title: string;
   subtitle: string[];
   accessionNumber: number;
   isbnNo: string;
   noOfCopies: number;
   barCodes: string[];
-  availabilities?: object[];
+  availabilities?: string[]; 
 }
 
 export interface ApiResponse<T> {

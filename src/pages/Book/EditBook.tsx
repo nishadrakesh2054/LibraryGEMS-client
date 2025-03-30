@@ -4,7 +4,6 @@ import {
   FaBook,
   FaUserEdit,
   FaBarcode,
-  FaCalendarAlt,
   FaArrowLeft,
   FaHashtag,
   FaSave,
@@ -14,11 +13,14 @@ import { useUpdateBookMutation, useGetBookByIdQuery } from "../../service/book";
 const EditBook = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: bookData, isLoading, isError } = useGetBookByIdQuery(Number(id));
+  const {
+    data: bookData,
+    isLoading,
+    isError,
+  } = useGetBookByIdQuery(Number(id));
   const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
 
   const [formData, setFormData] = useState({
-    date: "",
     title: "",
     subtitle: "",
     accessionNumber: "",
@@ -27,14 +29,9 @@ const EditBook = () => {
     barCodes: "",
   });
 
-
-
   useEffect(() => {
     if (bookData) {
       setFormData({
-        date: bookData.data?.date
-          ? new Date(bookData.data.date).toISOString().split("T")[0]
-          : "",
         title: bookData.data?.title || "",
         subtitle: bookData.data?.subtitle?.join(", ") || "",
         accessionNumber: bookData.data?.accessionNumber?.toString() || "",
@@ -191,26 +188,6 @@ const EditBook = () => {
                     className="pl-10 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                     required
                     placeholder="e.g., 7100"
-                  />
-                </div>
-              </div>
-
-              {/* Date Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Date *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaCalendarAlt className="text-gray-400" />
-                  </div>
-                  <input
-                    type="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
-                    className="pl-10 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                    required
                   />
                 </div>
               </div>

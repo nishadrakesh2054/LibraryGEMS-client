@@ -89,15 +89,14 @@ const EditBook = () => {
     );
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-900 min-h-screen">
-      <div className="max-w-4xl mx-auto">
+    <div className="p-6 space-y-10 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
         {/* Header with back button */}
         <div className="flex items-center mb-8">
           <button
             onClick={() => navigate("/books")}
             className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white mr-6"
           >
-            <FaArrowLeft className="mr-2" /> Back to Books
+            <FaArrowLeft className="mr-2 text-orange-600" /> Back 
           </button>
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center">
             <FaSave className="text-[#0079C0] mr-3" /> Edit Book
@@ -241,7 +240,7 @@ const EditBook = () => {
               <button
                 type="button"
                 onClick={() => navigate("/books")}
-                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                className="px-4 py-2 border border-orange-600 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
                 Cancel
               </button>
@@ -261,7 +260,7 @@ const EditBook = () => {
             </div>
           </form>
         </div>
-      </div>
+     
     </div>
   );
 };

@@ -4,12 +4,14 @@ import {
   FaTrash,
   FaSearch,
   FaFilter,
+  FaChevronLeft, FaChevronRight 
 } from "react-icons/fa";
 import { FaEye, FaBookOpen } from "react-icons/fa6";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useGetBooksQuery, useDeleteBookMutation } from "../../service/book";
 import { Book } from "../../types/book";
+
 
 const Books = () => {
   const { data: apiResponse, error, isLoading, refetch } = useGetBooksQuery();
@@ -212,21 +214,21 @@ const Books = () => {
                   <td className="py-4 px-6 flex gap-2">
                     <button
                       onClick={() => handleViewBook(book.id)}
-                      className="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 rounded-full hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors"
+                      className="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-gray-600 transition-colors"
                       title="View Details"
                     >
                       <FaEye />
                     </button>
                     <button
                       onClick={() => handleEditBook(book.id)}
-                      className="p-2 text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 rounded-full hover:bg-yellow-50 dark:hover:bg-gray-600 transition-colors"
+                      className="p-2 text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 rounded-full hover:bg-yellow-200 dark:hover:bg-gray-600 transition-colors"
                       title="Edit"
                     >
                       <FaEdit />
                     </button>
                     <button
                       onClick={() => handleDeleteBook(book.id)}
-                      className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 rounded-full hover:bg-red-50 dark:hover:bg-gray-600 transition-colors"
+                      className="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 rounded-full hover:bg-red-200 dark:hover:bg-gray-600 transition-colors"
                       title="Delete"
                     >
                       <FaTrash />
@@ -256,11 +258,11 @@ const Books = () => {
           <span className="font-medium">{books.length}</span> books
         </div>
         <div className="flex gap-2">
-          <button className="px-3 py-1 border border-[#0079C0] rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 disabled:opacity-50">
-            Previous
+          <button className="px-3 py-1 border flex items-center gap-2 border-gray-600 rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 disabled:opacity-50">
+          <FaChevronLeft /> Previous
           </button>
-          <button className="px-3 py-1 border border-[#0079C0] rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 disabled:opacity-50">
-            Next
+          <button className="px-3 py-1 border border-[#0079C0]  flex items-center gap-2 rounded-md text-white dark:text-gray-300 bg-[#0079C0] dark:bg-gray-700 disabled:opacity-50">
+            Next <FaChevronRight />
           </button>
         </div>
       </div>

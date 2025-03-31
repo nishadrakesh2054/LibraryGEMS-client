@@ -30,7 +30,7 @@ const StudentsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterGrade, setFilterGrade] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const studentsPerPage = 10;
+  const studentsPerPage = 8;
 
   // Filter students based on search and grade
   const filteredStudents = students.filter((student) => {
@@ -238,15 +238,39 @@ const StudentsPage = () => {
 
       {/* Pagination */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          Showing <span className="font-medium">{indexOfFirstStudent + 1}</span>{" "}
-          to{" "}
-          <span className="font-medium">
+        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg">
+          <span className="flex items-center">
+            <svg
+              className="w-4 h-4 mr-2 text-[#0079C0] dark:text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            Showing
+          </span>
+          <span className="mx-2  px-1.5 py-0.5font-medium text-orange-800 dark:text-orange-400 bg-orange-100/50 dark:bg-orange-900/20">
+          {indexOfFirstStudent + 1}
+          </span>
+          <span>to</span>
+          <span className="mx-1 font-medium text-orange-800 dark:text-orange-200 px-1.5 py-0.5 bg-orange-50 dark:bg-orange-700 rounded">
             {Math.min(indexOfLastStudent, filteredStudents.length)}
-          </span>{" "}
-          of <span className="font-medium">{filteredStudents.length}</span>{" "}
-          students
+          </span>
+          <span>of</span>
+          <span className="ml-1 font-medium text-orange-800 dark:text-orange-200 px-1.5 py-0.5 bg-orange-50  dark:bg-orange-700 rounded ">	
+            {filteredStudents.length}
+          </span>
+          <span className="ml-1">students</span>
         </div>
+
+        
         <div className="flex gap-2">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

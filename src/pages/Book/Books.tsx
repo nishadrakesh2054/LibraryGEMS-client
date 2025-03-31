@@ -4,14 +4,14 @@ import {
   FaTrash,
   FaSearch,
   FaFilter,
-  FaChevronLeft, FaChevronRight 
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import { FaEye, FaBookOpen } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useGetBooksQuery, useDeleteBookMutation } from "../../service/book";
 import { Book } from "../../types/book";
-
 
 const Books = () => {
   const { data: apiResponse, error, isLoading, refetch } = useGetBooksQuery();
@@ -19,6 +19,8 @@ const Books = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const booksPerPage = 7;
 
   // Transform API data to match your table structure
   const transformBookData = (apiBook: Book) => {
@@ -65,6 +67,7 @@ const Books = () => {
     }
   };
 
+  // filter logic
   const filteredBooks = books.filter((book) => {
     const matchesSearch =
       book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -74,6 +77,16 @@ const Books = () => {
       filterStatus === "all" || book.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
+  // Pagination logic
+  const indexOfLastBook = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const currentBooks = filteredBooks.slice(indexOfFirstBook, indexOfLastBook);
+  const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterStatus]);
 
   if (isLoading) return <div className="p-6 text-center">Loading...</div>;
   if (error)
@@ -169,33 +182,33 @@ const Books = () => {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 text-[15px]  capitalize">
-            {filteredBooks.length > 0 ? (
-              filteredBooks.map((book) => (
+            {currentBooks.length > 0 ? (
+              currentBooks.map((book) => (
                 <tr
                   key={book.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
-                  <td className="py-4 px-6 text-gray-800 dark:text-white  ">
+                  <td className="py-4 px-2 text-gray-800 dark:text-white  ">
                     {book.title}
                   </td>
-                  <td className="py-4 px-6 text-gray-600 dark:text-gray-400">
+                  <td className="py-4 px-2 text-gray-600 dark:text-gray-400">
                     {book.author}
                   </td>
-                  <td className="py-4 px-6 text-gray-600 dark:text-gray-400">
+                  <td className="py-4 px-2 text-center text-gray-600 dark:text-gray-400">
                     {book.accessionNumber}
                   </td>
-                  <td className="py-4 px-6 text-gray-600 dark:text-gray-400 font-mono">
+                  <td className="py-4 px-2 text-center text-gray-600 dark:text-gray-400 font-mono">
                     {book.isbn}
                   </td>
 
-                  <td className="py-4 px-6 text-gray-600 dark:text-gray-400 font-mono">
+                  <td className="py-4 px-2 text-center text-gray-600 dark:text-gray-400 font-mono">
                     {book.noOfCopies}
                   </td>
 
-                  <td className="py-3 px-6 text-gray-600 dark:text-gray-400">
+                  <td className="py-4 px-2  text-gray-600 dark:text-gray-400">
                     {book.barCodes}
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="py-4 px-2">
                     <span
                       className={`px-2 py-1 text-xs rounded-full ${
                         book.status === "Available"
@@ -211,10 +224,10 @@ const Books = () => {
                     </span>
                   </td>
 
-                  <td className="py-4 px-6 flex gap-2">
+                  <td className="py-4  px-2  flex gap-2 ">
                     <button
                       onClick={() => handleViewBook(book.id)}
-                      className="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-gray-600 transition-colors"
+                      className="p-2  text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-gray-600 transition-colors"
                       title="View Details"
                     >
                       <FaEye />
@@ -251,18 +264,56 @@ const Books = () => {
       </div>
 
       {/* Pagination would go here */}
-      <div className="flex justify-between items-center mt-4">
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          Showing <span className="font-medium">1</span> to{" "}
-          <span className="font-medium">{filteredBooks.length}</span> of{" "}
-          <span className="font-medium">{books.length}</span> books
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg">
+          <span className="flex items-center">
+            <svg
+              className="w-4 h-4 mr-2 text-[#0079C0] dark:text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            Showing
+          </span>
+          <span className="mx-2  px-1.5 py-0.5font-medium text-orange-800 dark:text-orange-400 bg-orange-100/50 dark:bg-orange-900/20">
+            {indexOfFirstBook + 1}
+          </span>
+          <span>to</span>
+          <span className="mx-1 font-medium text-orange-800 dark:text-orange-200 px-1.5 py-0.5 bg-orange-50 dark:bg-orange-700 rounded">
+            {Math.min(indexOfLastBook, filteredBooks.length)}
+          </span>
+          <span>of</span>
+          <span className="ml-1 font-medium text-orange-800 dark:text-orange-200 px-1.5 py-0.5 bg-orange-50  dark:bg-orange-700 rounded ">
+            {filteredBooks.length}
+          </span>
+          <span className="ml-1">Books</span>
         </div>
+
         <div className="flex gap-2">
-          <button className="px-3 py-1 border flex items-center gap-2 border-gray-600 rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 disabled:opacity-50">
-          <FaChevronLeft /> Previous
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 border flex items-center gap-2 border-[#0079C0] dark:border-[#0079C0] rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <FaChevronLeft className="text-xs" /> Previous
           </button>
-          <button className="px-3 py-1 border border-[#0079C0]  flex items-center gap-2 rounded-md text-white dark:text-gray-300 bg-[#0079C0] dark:bg-gray-700 disabled:opacity-50">
-            Next <FaChevronRight />
+
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages || totalPages === 0}
+            className="px-4 py-2 border flex items-center gap-2 border-blue-600 rounded-md text-white dark:text-gray-300 bg-[#0079C0] dark:bg-[#0079C0] hover:bg-[#007ac0e3] dark:hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next <FaChevronRight className="text-xs" />
           </button>
         </div>
       </div>

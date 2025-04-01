@@ -11,10 +11,15 @@ export const studentApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
   tagTypes: ["Students"],
   endpoints: (builder) => ({
-    getStudents: builder.query<AllStudentsResponse, void>({
-      query: () => "/students",
-      providesTags: ["Students"],
-    }),
+    // getStudents: builder.query<AllStudentsResponse, void>({
+    //   query: () => "/students",
+    //   providesTags: ["Students"],
+    // }),
+
+    getStudents: builder.query<AllStudentsResponse, string | void>({
+        query: (search) => (search ? `/students?search=${search}` : "/students"),
+        providesTags: ["Students"],
+      }),
     getStudentById: builder.query<SingleStudentResponse, number>({
       query: (id) => `/students/${id}`,
       providesTags: ["Students"],
@@ -29,18 +34,15 @@ export const studentApi = createApi({
       invalidatesTags: ["Students"],
     }),
 
- 
-
-
     // In your service file
-updateStudent: builder.mutation<SingleStudentResponse, Student>({
-    query: (student) => ({
-      url: `/students/${student.id}`,
-      method: "PUT",
-      body: student,
+    updateStudent: builder.mutation<SingleStudentResponse, Student>({
+      query: (student) => ({
+        url: `/students/${student.id}`,
+        method: "PUT",
+        body: student,
+      }),
+      invalidatesTags: ["Students"],
     }),
-    invalidatesTags: ["Students"],
-  }),
     deleteStudent: builder.mutation<DeleteStudentResponse, number>({
       query: (id) => ({
         url: `/students/${id}`,

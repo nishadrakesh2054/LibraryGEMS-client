@@ -9,6 +9,7 @@ import {
   FaUndo,
 } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { useNavigate } from "react-router";
 
 type Transaction = {
   id: number;
@@ -23,6 +24,7 @@ type Transaction = {
 };
 
 const Circulation = () => {
+  const navigate = useNavigate();
   // Sample transaction data
   const [transactions, setTransactions] = useState<Transaction[]>([
     {
@@ -117,23 +119,23 @@ const Circulation = () => {
   );
 
   // Handle return
-//   const handleReturn = (transactionId: number) => {
-//     const today = new Date().toISOString().split("T")[0];
-//     const updatedTransactions = transactions.map((transaction) => {
-//       if (transaction.id === transactionId) {
-//         return {
-//           ...transaction,
-//           returnDate: today,
-//           status: "Returned",
-//         };
-//       }
-//       return transaction;
-//     });
-//     setTransactions(updatedTransactions);
-//   };
+  //   const handleReturn = (transactionId: number) => {
+  //     const today = new Date().toISOString().split("T")[0];
+  //     const updatedTransactions = transactions.map((transaction) => {
+  //       if (transaction.id === transactionId) {
+  //         return {
+  //           ...transaction,
+  //           returnDate: today,
+  //           status: "Returned",
+  //         };
+  //       }
+  //       return transaction;
+  //     });
+  //     setTransactions(updatedTransactions);
+  //   };
 
-const handleReturn = (transactionId: number) => {
-    const today = new Date().toISOString().split('T')[0];
+  const handleReturn = (transactionId: number) => {
+    const today = new Date().toISOString().split("T")[0];
     const updatedTransactions = transactions.map((transaction) => {
       if (transaction.id === transactionId) {
         return {
@@ -153,7 +155,7 @@ const handleReturn = (transactionId: number) => {
 
   return (
     <div className="p-6 space-y-10 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-        {/* Header */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-6">
@@ -164,11 +166,17 @@ const handleReturn = (transactionId: number) => {
           </p>
         </div>
         <div className="flex gap-4">
-          <button className="flex items-center text-white bg-[#0079C0] hover:bg-yellow-700 px-4 py-2 rounded-md transition-colors duration-200">
+          <button
+            onClick={() => navigate("/issuebook")}
+            className="flex items-center text-white bg-[#0079C0] hover:bg-yellow-700 px-4 py-2 rounded-md transition-colors duration-200"
+          >
             <FaBook className="mr-2" />
             Borrow Book
           </button>
-          <button className="flex items-center text-white bg-[#0079C0] hover:bg-yellow-700 px-4 py-2 rounded-md transition-colors duration-200">
+          <button
+            onClick={() => navigate("/returnbook")}
+            className="flex items-center text-white bg-[#0079C0] hover:bg-yellow-700 px-4 py-2 rounded-md transition-colors duration-200"
+          >
             <FaUndo className="mr-2" /> Return Book
           </button>
         </div>

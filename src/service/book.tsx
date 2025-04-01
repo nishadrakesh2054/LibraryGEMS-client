@@ -6,10 +6,26 @@ export const bookApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
   tagTypes: ["Books"],
   endpoints: (builder) => ({
-    getBooks: builder.query<ApiResponse<BooksResponse>, void>({
-      query: () => "/books",
-      providesTags: ["Books"],
-    }),
+    // getBooks: builder.query<ApiResponse<BooksResponse>, void>({
+    //   query: () => "/books",
+    //   providesTags: ["Books"],
+    // }),
+
+
+
+    getBooks: builder.query<ApiResponse<BooksResponse>, string | void>({
+            query: (search) => (search ? `/books?search=${search}` : "/books"),
+            providesTags: ["Books"],
+          }),
+
+    // getBooks: builder.query<ApiResponse<BooksResponse>, string | void>({
+    //     query: (search) => ({
+    //       url: "/books",
+    //       params: search ? { search } : {}, // Add search query if provided
+    //     }),
+    //     providesTags: ["Books"],
+    //   }),
+      
     getBookById: builder.query<ApiResponse<Book>, number>({
       query: (id) => `/books/${id}`,
       providesTags: ["Books"],

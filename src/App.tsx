@@ -15,6 +15,8 @@ import ViewStudent from "./pages/Student/ViewStudent";
 import AddBook from "./pages/Book/AddBook";
 import EditBook from "./pages/Book/EditBook";
 import ViewBook from "./pages/Book/ViewBook";
+import IssueBook from "./pages/circulation/IssueBook";
+import ReturnBook from "./pages/circulation/ReturnBook";
 
 export default function App() {
   return (
@@ -26,10 +28,13 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Home />} />
 
+
+            {/* Books Page start */}
             <Route path="/books" element={<Books />} />
             <Route path="/addbook" element={<AddBook />} />
             <Route path="/editbook/:id" element={<EditBook />} />
             <Route path="/viewbook/:id" element={<ViewBook />} />
+            {/* Books Page end */}
 
             {/* Students  Page start */}
             <Route path="/students" element={<Students />} />
@@ -38,6 +43,10 @@ export default function App() {
             <Route path="/viewstudent/:id" element={<ViewStudent />} />
             {/* Students  Page  end */}
 
+
+            {/* Circulation Page start */}
+            <Route path="/issuebook" element={<IssueBook />} />
+            <Route path="/returnbook" element={<ReturnBook />} />
             <Route path="/circulations" element={<Circulation />} />
             <Route path="/reports" element={<Reports />} />
           </Route>

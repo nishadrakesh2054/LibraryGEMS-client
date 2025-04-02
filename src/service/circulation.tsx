@@ -5,20 +5,22 @@ import {
   StudentTransactionsResponse,
   TotalActiveTransactionsResponse,
   TransactionsDetailsResponse,
+  
 } from "../types/circulation";
 
 export const circulationApi = createApi({
   reducerPath: "circulationApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api/bookscirculation",
+    prepareHeaders: (headers) => {
+      headers.set("Content-Type", "application/json");
+      return headers;
+    },
   }),
   tagTypes: ["Transactions"],
   endpoints: (builder) => ({
     // Issue a book
-    issueBook: builder.mutation<
-      IssueBookResponse,
-      { studentId: number; bookId: number }
-    >({
+    issueBook: builder.mutation<IssueBookResponse,{ studentId: number; bookId: number; dueDate: string }>({
       query: (issueData) => ({
         url: "/issue",
         method: "POST",
@@ -39,6 +41,20 @@ export const circulationApi = createApi({
       }
     ),
 
+    // Get all transactions with filters
+    getAllTransactions: builder.query<TotalActiveTransactionsResponse,{status?: "issued" | "returned" | "overdue";studentId?: number;bookId?: number;showReturned?: boolean;}>({
+      query: (params) => ({
+        url: "/transactions",
+        params: {
+          ...params,
+          showReturned: params.showReturned ? true : undefined,
+        },
+      }),
+      providesTags: ["Transactions"],
+    }),
+
+
+
     // Get all active transactions
     getActiveTransactions: builder.query<TotalActiveTransactionsResponse, void>(
       {
@@ -47,18 +63,20 @@ export const circulationApi = createApi({
       }
     ),
 
-    // Get transactions for a specific student
-    getStudentTransactions: builder.query<StudentTransactionsResponse, number>({
-      query: (studentId) => `/student/${studentId}`,
+
+    // Get active transactions (overdue)
+    getOverdueTransactions: builder.query<TotalActiveTransactionsResponse,void>({
+      query: () => "/overdue",
       providesTags: ["Transactions"],
     }),
 
-    // Get overdue transactions
-    getOverdueTransactions: builder.query<
-      TotalActiveTransactionsResponse,
-      void
-    >({
-      query: () => "/overdue",
+
+
+
+
+    // Get transactions for a specific student
+    getStudentTransactions: builder.query<StudentTransactionsResponse, number>({
+      query: (studentId) => `/student/${studentId}`,
       providesTags: ["Transactions"],
     }),
 
@@ -73,8 +91,10 @@ export const circulationApi = createApi({
 export const {
   useIssueBookMutation,
   useReturnBookMutation,
+  useGetAllTransactionsQuery,
   useGetActiveTransactionsQuery,
   useGetOverdueTransactionsQuery,
-  useGetStudentTransactionsQuery,
+  useGetStudentTransactionsQuery, 
   useGetTransactionByIdQuery,
+
 } = circulationApi;

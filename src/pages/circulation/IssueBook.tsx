@@ -11,6 +11,7 @@ import { useGetStudentsQuery } from "../../service/student";
 import { useGetBooksQuery } from "../../service/book";
 import { useIssueBookMutation } from "../../service/circulation";
 import Select from "react-select";
+import { toast } from "react-toastify";
 
 interface Student {
   id: number;
@@ -40,7 +41,7 @@ const IssueBook: React.FC = () => {
     studentId: "",
     bookId: "",
     issueDate: new Date().toISOString().split("T")[0],
-    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
       .toISOString()
       .split("T")[0],
   });
@@ -97,53 +98,44 @@ const IssueBook: React.FC = () => {
     }));
   };
 
+  // Add the mutation hook
+  const [issueBook] = useIssueBookMutation();
 
-    // Add the mutation hook
-    const [issueBook] = useIssueBookMutation();
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-     // Validate form data
-     if (!formData.studentId || !formData.bookId) {
-        alert("Please select both a student and a book");
-        return;
-      }
+    if (!formData.studentId || !formData.bookId) {
+      alert("Please select both a student and a book");
+      return;
+    }
     setIsSubmitting(true);
     try {
-        // Convert string IDs to numbers
-        const issueData = {
-          studentId: Number(formData.studentId),
-          bookId: Number(formData.bookId),
-          // Add these if your API expects them
-          // issueDate: formData.issueDate,
-          // dueDate: formData.dueDate
-        };
-  
-        // Call the mutation
-        const response = await issueBook(issueData).unwrap();
-  
-        // Handle successful response
-        console.log("Book issued successfully:", response);
-        alert(`Book issued successfully! Remaining copies: ${response.remainingCopies}`);
-        
-        // Reset form or navigate away
-        setFormData({
-          studentId: "",
-          bookId: "",
-          issueDate: new Date().toISOString().split("T")[0],
-          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-            .toISOString()
-            .split("T")[0],
-        });
-        
-        // Optionally navigate to transactions page
-        // navigate("/transactions");
-      } catch (error) {
-        // Handle error
-        console.error("Failed to issue book:", error);
-        alert("Failed to issue book. Please try again.");
-      } finally {
-        setIsSubmitting(false);
-      }
+      const issueData = {
+        studentId: Number(formData.studentId),
+        bookId: Number(formData.bookId),
+        issueDate: formData.issueDate,
+        dueDate: formData.dueDate,
+      };
+      const response = await issueBook(issueData).unwrap();
+      toast.success(
+        `Book issued successfully! Remaining copies: ${response.remainingCopies}`
+      );
+      setFormData({
+        studentId: "",
+        bookId: "",
+        issueDate: new Date().toISOString().split("T")[0],
+        dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split("T")[0],
+      });
+
+      navigate("/circulations");
+    } catch (error) {
+      // Handle error
+      console.error("Failed to issue book:", error);
+      toast.error("Failed to issue book. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
 
     console.log("Form submitted:", formData);
 
@@ -274,7 +266,7 @@ const IssueBook: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-[#0079C0] rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
               disabled={isSubmitting}
             >
               Cancel
@@ -282,7 +274,7 @@ const IssueBook: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting || !formData.studentId || !formData.bookId}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400 transition-colors"
+              className="px-4 py-2 bg-[#0079C0] text-white rounded-md hover:bg-blue-600  transition-colors"
             >
               {isSubmitting ? "Processing..." : "Issue Book"}
             </button>
